@@ -161,6 +161,7 @@ def set_questions():
 def add_questions():
     try:
         cellArray = set_questions()
+        print("heelo" + cellArray)
         for i in range(len(cellArray)):
             get_client().update_serial({QUESTIONS: [
                 cellArray[i]

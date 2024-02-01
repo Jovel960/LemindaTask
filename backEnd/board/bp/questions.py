@@ -13,5 +13,5 @@ def set_questions():
     if resFlag:
         return jsonify({'ok':'questions are added'}), 201
     else:
-        return jsonify({'eror':'faild to adding the questions'})
+        return jsonify({'error':'faild to adding the questions'}), 400
     

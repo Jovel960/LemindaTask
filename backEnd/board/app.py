@@ -1,13 +1,15 @@
 from flask import Flask
-from bp import auth
+from bp import (auth, questions)
 from flask_login import LoginManager
 from db.models import User
 import db
+import os
+from dotenv import load_dotenv
 
 def create_app():
     app = Flask(__name__)
     # app.secret_key = 'your_secret_key'
-    app.config['SECRET_KEY'] = 'leminda'
+    app.config['SECRET_KEY'] = os.environ.get('APP_SECRET_KEY')
     login_manager = LoginManager()
     login_manager.init_app(app)
     @login_manager.user_loader
@@ -17,11 +19,13 @@ def create_app():
             return User(user_id=user_data['user_id'], user_name=user_data['user_name'], password=user_data['hashed_pwd'])
         return None
     app.register_blueprint(auth.app_auth, url_prefix='/auth')
+    app.register_blueprint(questions.app_questions)
     @app.route('/', methods=['GET'])
     def index():
-        return 'pong'
+        return 'Leminda Task'
     return app
 
 if __name__ == '__main__':
+    load_dotenv()
     app = create_app()
     app.run(debug=True)

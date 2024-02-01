@@ -1,2 +1,4 @@
 /client-app
 /backEnd/venv
+/backEnd/.env
+/backEnd/board/bp/__pycache__
