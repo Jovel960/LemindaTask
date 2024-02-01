@@ -137,38 +137,27 @@ d_questions = [
     }
 ]
 
-def set_questions():
-    cellArray = []
-    for q in d_questions:
-        cellArray += [
-            UCellSerial(
-            f=Flag.INSERT,
-            k=[q.q_id.encode()],
-            v=[
-                CellValueSerial(field_id=0, v_bytes=q.question.encode()),
-                CellValueSerial(field_id=1, v_bytes=q.options[0].encode()),
-                CellValueSerial(field_id=1, v_bytes=q.options[1].encode()),
-                CellValueSerial(field_id=1, v_bytes=q.options[2].encode()),
-                CellValueSerial(field_id=1, v_bytes=q.options[3].encode()),
-                CellValueSerial(field_id=1, v_bytes=q.correct_answer.encode()),
-
-            ],
-            ts_desc=True
-            )
-        ]
-    return cellArray
-
 def add_questions():
-    try:
-        cellArray = set_questions()
-        print("heelo" + cellArray)
-        for i in range(len(cellArray)):
-            get_client().update_serial({QUESTIONS: [
-                cellArray[i]
-                ]}, 0)
-        return True
-    except: 
-        return False
+     for q in d_questions:
+        print(q)
+        get_client().update_serial({QUESTIONS:  UCellSerial(
+        f=Flag.INSERT,
+        k=[q["q_id"].encode()],
+        v=[
+            CellValueSerial(field_id=0, v_bytes=q.question.encode()),
+            CellValueSerial(field_id=1, v_bytes=q.options[0].encode()),
+            CellValueSerial(field_id=1, v_bytes=q.options[1].encode()),
+            CellValueSerial(field_id=1, v_bytes=q.options[2].encode()),
+            CellValueSerial(field_id=1, v_bytes=q.options[3].encode()),
+            CellValueSerial(field_id=1, v_bytes=q.correct_answer.encode()),
+        ],
+        ts_desc=True
+        )}, 0)
+     q = get_client().sql_select_serial(
+        f'select where col({USER})=(cells=(key=[="{user_id}"]))'
+        )
+     print(q)
+        
 
         
  
