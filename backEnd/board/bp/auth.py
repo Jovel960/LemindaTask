@@ -1,6 +1,6 @@
-from flask import   current_app,jsonify, request, redirect, flash
+from flask import  current_app,jsonify, request
 from flask_login import login_user, logout_user, login_required, current_user
-from werkzeug.security import generate_password_hash, check_password_hash
+# from werkzeug.security import generate_password_hash, check_password_hash
 import bcrypt
 import flask
 import db
@@ -28,11 +28,10 @@ def login():
         return jsonify({"error":"user_id or password is missing"}), 400
     try:
         userFound = db.swcdb.user.get_user(user_id)
-        print( check_user_password_match(user_pwd,userFound["hashed_pwd"]))
         if not (userFound and check_user_password_match(user_pwd, userFound["hashed_pwd"])):
             return jsonify({'error':'username or password are wrong'}), 400
         login_user(User(user_id=userFound['user_id'], user_name=userFound['user_name'], password=userFound['hashed_pwd']))
-        return jsonify({"ok":"user loggen in"})
+        return jsonify({"ok":"user logged in"})
     except Exception as e:
         current_app.logger.error(f"Error: {e.__class__.__name__}: {str(e)}")  
         return jsonify({'error': f'something went wrong: {e.__class__.__name__}'}), 400
@@ -58,7 +57,7 @@ def register():
         if(user_created):
             user_record = db.swcdb.user.get_user(username)
             login_user(User(user_id=user_record['user_id'], user_name=user_record['user_name'], password=user_record['hashed_pwd']))
-            return jsonify({'username': username, 'hashed_pwd': hashed_pwd}), 201
+            return jsonify({'ok': 'user created successfully', 'username': username}), 201
         else:
             return jsonify({'error':'something went wrong'}), 400
     except Exception as e:

@@ -3,13 +3,12 @@ from bp import (auth, questions)
 from flask_login import LoginManager
 from db.models import User
 import db
-import os
-from dotenv import load_dotenv
+from utilities.config import APP_SECRET_KEY
 
 def create_app():
     app = Flask(__name__)
     # app.secret_key = 'your_secret_key'
-    app.config['SECRET_KEY'] = os.environ.get('APP_SECRET_KEY')
+    app.config['SECRET_KEY'] = APP_SECRET_KEY
     login_manager = LoginManager()
     login_manager.init_app(app)
     @login_manager.user_loader
@@ -26,6 +25,5 @@ def create_app():
     return app
 
 if __name__ == '__main__':
-    load_dotenv()
     app = create_app()
     app.run(debug=True)

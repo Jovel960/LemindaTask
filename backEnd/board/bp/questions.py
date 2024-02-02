@@ -1,5 +1,5 @@
-from flask import   current_app ,jsonify, request
-from flask_login import login_required, current_user
+from flask import   current_app ,jsonify
+from flask_login import login_required
 import flask
 import db
 

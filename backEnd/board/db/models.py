@@ -9,11 +9,8 @@ class User(UserMixin):
 
     @staticmethod
     def get(user_name):
-        # Here you'd query your database for the user by ID
-        # For demonstration, let's pretend we found a user:
         user = db.swcdb.user.get_user(user_name)
         return user
 
     def get_id(self):
-        # Assuming the user ID is stored as a string in the database
         return str(self.id) #in case
