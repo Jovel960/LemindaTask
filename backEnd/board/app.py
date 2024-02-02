@@ -1,5 +1,5 @@
 from flask import Flask
-from bp import (auth, questions)
+import bp
 from flask_login import LoginManager
 from db.models import User
 import db
@@ -17,8 +17,7 @@ def create_app():
         if user_data:
             return User(user_id=user_data['user_id'], user_name=user_data['user_name'], password=user_data['hashed_pwd'])
         return None
-    app.register_blueprint(auth.app_auth, url_prefix='/auth')
-    app.register_blueprint(questions.app_questions)
+    bp.init(app)
     @app.route('/', methods=['GET'])
     def index():
         return 'Leminda Task'

@@ -9,6 +9,10 @@ FEEDBKACk = {
     1: 'positive'
 }
 
-feedBackOperations = flask.Blueprint("feedBackOperations", __name__)
+_app = flask.Blueprint("feedBackOperations", __name__)
+def init(app): app.register_blueprint(_app, url_prefix='/feedback')
 
-feedBackOperations.route('')
+
+@_app.route('/')
+def index():
+    return 'feedback'

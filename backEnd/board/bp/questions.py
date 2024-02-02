@@ -4,9 +4,10 @@ import flask
 import db
 
 
-app_questions = flask.Blueprint('questions', __name__)
+_app = flask.Blueprint('questions', __name__)
+def init(app): app.register_blueprint(_app)
 
-@app_questions.route('/questions', methods=["GET", "POST"])
+@_app.route('/questions', methods=["GET", "POST"])
 @login_required
 def set_questions():
     resFlag = db.swcdb.questions.add_questions()

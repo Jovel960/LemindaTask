@@ -6,8 +6,8 @@ import flask
 import db
 from db.models import User
 
-app_auth = flask.Blueprint('auth', __name__)
-
+_app = flask.Blueprint('auth', __name__)
+def init(app): app.register_blueprint(_app, url_prefix='/auth')
 
 def check_user_password_match(pwd1, pwd2):
     return bcrypt.checkpw(pwd1.encode(), pwd2.encode())
@@ -15,12 +15,13 @@ def check_user_password_match(pwd1, pwd2):
 def create_user_password_hash(pwd):
     return bcrypt.hashpw(pwd.encode(), bcrypt.gensalt()).decode()
 
-@app_auth.route('/getuser/<username>')
+@_app.route('/getuser/<username>')
 @login_required
 def check(username):
     return db.swcdb.user.get_user(username)
+  
 
-@app_auth.route('/login', methods=["POST"])
+@_app.route('/login', methods=["POST"])
 def login():
     user_id = request.json["userid"].strip()
     user_pwd = request.json["password"].strip()
@@ -36,14 +37,14 @@ def login():
         current_app.logger.error(f"Error: {e.__class__.__name__}: {str(e)}")  
         return jsonify({'error': f'something went wrong: {e.__class__.__name__}'}), 400
 
-@app_auth.route('/logout', methods=["POST"])
+@_app.route('/logout', methods=["POST"])
 @login_required
 def logout():
     logout_user()
     return jsonify({"ok":"user logged out"}), 200
     # logout_user();
 
-@app_auth.route('/register', methods=["POST"])
+@_app.route('/register', methods=["POST"])
 def register():
     try:
         username = request.json['userid'].strip()
