@@ -3,17 +3,16 @@ import bp
 from flask_login import LoginManager
 from db.models import User
 import db
-from utilities.config import APP_SECRET_KEY
+from utilities import APP_SECRET_KEY
 
 def create_app():
     app = Flask(__name__)
-    # app.secret_key = 'your_secret_key'
     app.config['SECRET_KEY'] = APP_SECRET_KEY
     login_manager = LoginManager()
     login_manager.init_app(app)
     @login_manager.user_loader
     def load_user(user_id):
-        user_data = db.swcdb.user.get_user(user_id)  # This should return a user model instance, not a dict
+        user_data = db.swcdb.user.get_user(user_id)
         if user_data:
             return User(user_id=user_data['user_id'], user_name=user_data['user_name'], password=user_data['hashed_pwd'])
         return None
