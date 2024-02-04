@@ -41,8 +41,9 @@ def register_user(user_id,user_name, pwd):
      return True #User created
 
 # def remove_user(user_name):
-#     pass
-
+#     return {'updated': bool(get_client().sql_select(f'select where col({USER})=(cells=(key=[={user_name}] DELETE_MATCHING))' + 
+#                                                     ' and ' + f"col({USER_FEEDBACK})=(cells=(key=[={user_name}] DELETE_MATCHING))"))}
+ 
 def get_user(user_id):
     user = get_client().sql_select_serial(
         f'select where col({USER})=(cells=(key=[="{user_id}"]))'
