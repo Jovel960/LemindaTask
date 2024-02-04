@@ -138,26 +138,35 @@ d_questions = [
 ]
 
 def add_questions():
-     for q in d_questions:
-        print(q)
-        get_client().update_serial({QUESTIONS:  UCellSerial(
+    for q in d_questions:
+        get_client().update_serial({QUESTIONS:  [UCellSerial(
         f=Flag.INSERT,
         k=[q["q_id"].encode()],
         v=[
-            CellValueSerial(field_id=0, v_bytes=q.question.encode()),
-            CellValueSerial(field_id=1, v_bytes=q.options[0].encode()),
-            CellValueSerial(field_id=1, v_bytes=q.options[1].encode()),
-            CellValueSerial(field_id=1, v_bytes=q.options[2].encode()),
-            CellValueSerial(field_id=1, v_bytes=q.options[3].encode()),
-            CellValueSerial(field_id=1, v_bytes=q.correct_answer.encode()),
-        ],
+            CellValueSerial(field_id=0, v_bytes=q["question"].encode()),
+            CellValueSerial(field_id=1, v_lb=[s.encode() for s in q["options"]]),
+            CellValueSerial(field_id=2, v_bytes=q["correct_answer"].encode()),
+            ],
         ts_desc=True
-        )}, 0)
-     q = get_client().sql_select_serial(
-        f'select where col({USER})=(cells=(key=[="{user_id}"]))'
-        )
-     print(q)
-        
+        )]}, 0)
+    return True
+
+def get_questions():
+    _q = []
+    q = get_client().sql_select_serial(f'select where col({QUESTIONS})=(cells=())')
+    for __q in q:
+        q_id =  __q.k[0].decode()
+        question=__q.v[0].v_bytes.decode()
+        options = [s.decode() for s in __q.v[1].v_lb]
+        correct_answer = __q.v[2].v_bytes.decode()
+        _q.append({
+            "q_id": q_id,
+            "question": question,
+            "options": options,
+            "correct_answer": correct_answer
+            })    # print(_q)
+    return _q
+    
 
         
  

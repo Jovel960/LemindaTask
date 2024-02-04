@@ -2,7 +2,7 @@ POST http://localhost:5000/auth/register
 Content-Type: application/json
 
 {
-"userid":"jovy6clswsss2",
+"userid":"jovel",
 "username":"yovel",
 "password":"1243"
 }
@@ -11,6 +11,10 @@ Content-Type: application/json
 
 
 POST http://localhost:5000/questions
+
+###
+
+GET http://localhost:5000/questions
 
 
 ###
@@ -23,7 +27,7 @@ POST http://localhost:5000/auth/login
 Content-Type: application/json
 
 {
-    "userid": "jovy6clswsss2",
+    "userid": "jovel",
     "password": "1243"
 }
 

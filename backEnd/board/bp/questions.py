@@ -1,18 +1,24 @@
-from flask import   current_app ,jsonify
+from flask import   current_app ,jsonify, request, Blueprint
 from flask_login import login_required
-import flask
 import db
 
 
-_app = flask.Blueprint('questions', __name__)
+_app = Blueprint('questions', __name__)
 def init(app): app.register_blueprint(_app)
 
 @_app.route('/questions', methods=["GET", "POST"])
 @login_required
-def set_questions():
-    resFlag = db.swcdb.questions.add_questions()
-    if resFlag:
-        return jsonify({'ok':'questions are added'}), 201
+def questions():
+    if(request.method == "POST"):
+        try:
+            db.swcdb.questions.add_questions()
+            return jsonify({'ok':'questions are added'}), 201
+        except:
+            return jsonify({'error':'faild to adding the questions'}), 400
     else:
-        return jsonify({'error':'faild to adding the questions'}), 400
+        questions = db.swcdb.questions.get_questions()
+        return jsonify(questions), 200
+
+    
+
     

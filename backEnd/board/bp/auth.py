@@ -1,12 +1,11 @@
-from flask import  current_app,jsonify, request
+from flask import  current_app,jsonify, request, Blueprint
 from flask_login import login_user, logout_user, login_required, current_user
 # from werkzeug.security import generate_password_hash, check_password_hash
 import bcrypt
-import flask
 import db
 from db.models import User
 
-_app = flask.Blueprint('auth', __name__)
+_app = Blueprint('auth', __name__)
 def init(app): app.register_blueprint(_app, url_prefix='/auth')
 
 def check_user_password_match(pwd1, pwd2):

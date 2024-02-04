@@ -48,8 +48,6 @@ def get_user(user_id):
     user = get_client().sql_select_serial(
         f'select where col({USER})=(cells=(key=[="{user_id}"]))'
     )
-    print(len(user))
-    #print([user[0].k[0].decode(), user[0].v[0].v_bytes.decode()])
     if len(user) == 1:
         return {"user_id":user[0].k[0].decode(),"user_name":user[0].v[0].v_bytes.decode(), "hashed_pwd" : user[0].v[1].v_bytes.decode()}  
     else:

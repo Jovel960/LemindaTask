@@ -1,6 +1,5 @@
-from flask import  request, redirect, flash
+from flask import  request, Blueprint
 from flask_login import login_required
-import flask 
 from db.swcdb.definer_columns import (QUESTIONS, USER, USER_FEEDBACK)
 
 
@@ -9,7 +8,7 @@ FEEDBKACk = {
     1: 'positive'
 }
 
-_app = flask.Blueprint("feedBackOperations", __name__)
+_app = Blueprint("feedBackOperations", __name__)
 def init(app): app.register_blueprint(_app, url_prefix='/feedback')
 
 
