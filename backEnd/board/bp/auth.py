@@ -72,6 +72,10 @@ def index():
 @_app.route('/user/delete/<user_id>', methods=["DELETE"])
 @login_required
 def delete_user(user_id):
-    res = db.swcdb.user.remove_user(user_id)
-    return jsonify(res), 200
+    try: 
+        res = db.swcdb.user.remove_user(user_id)
+        if res: return "", 204
+    except:
+        return jsonify({'error':'something went wrong'}), 400
+
     

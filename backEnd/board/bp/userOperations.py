@@ -13,7 +13,7 @@ _app = Blueprint("feedBackOperations", __name__)
 def init(app): app.register_blueprint(_app, url_prefix='/feedback')
 
 
-@_app.route('/rate/<q_id>', methods=["POST"])
+@_app.route('/rate/<q_id>', methods=["PATCH"])
 @login_required
 def rate(q_id):
     user_id=current_user.id
