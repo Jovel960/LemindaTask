@@ -65,3 +65,9 @@ def register():
         current_app.logger.error(f"Error: {e.__class__.__name__}: {str(e)}")  # This prints the type of the exception and the message
         return jsonify({'error': f'something went wrong: {e.__class__.__name__}'}), 400
     
+@_app.route('/islogged')
+@login_required
+def index():
+    return "", (200 if current_user.is_authenticated else 401)
+
+    

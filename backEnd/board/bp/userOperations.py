@@ -25,11 +25,24 @@ def rate(q_id):
 
 @_app.route('/comment/<q_id>', methods=["POST"])
 @login_required
-def feedback(q_id):
+def add_feedback(q_id):
     user_id=current_user.id
     feedback = request.json["feedback"]
-    print(feedback)
     if not bool(feedback):
         return jsonify({"error":"feedback is missing"}), 400
     res = db.swcdb.questions.feedback(q_id,user_id, feedback)
     return jsonify(res), 200
+
+@_app.route('/comment/delete/<q_id>', methods=["POST"])
+@login_required
+def delete_feedback(q_id):
+    user_id=current_user.id
+    res = db.swcdb.questions.delete_feedback(q_id,user_id)
+    return jsonify(res), 200
+
+#todo
+@_app.route('/answer/<q_id>', methods=["POST"])
+@login_required
+def user_asnwer(q_id):
+    pass
+

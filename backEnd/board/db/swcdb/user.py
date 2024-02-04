@@ -1,27 +1,9 @@
 from db.swcdb import (get_client)
 from .definer_columns import (QUESTIONS,USER,USER_FEEDBACK)
 from swcdb.thrift.service import (
-    SpecScan,
     UCellSerial,
     CellValueSerial,
-    SpecIntervalSerial,
-    SpecKeyInterval,
-    SpecFraction,
-    SpecIntervalOptions,
-    Flag,
-    Comp,
-    SpecColumnSerial,
-    SpecFlags,
-    SpecFlagsOpt,
-    SpecIntervalUpdateSerial,
-    SpecUpdateOP,
-    UpdateOP,
-    SpecValueSerial,
-    SpecValueSerialField,
-    SpecValueSerial_BYTES,
-    CellValueSerialOp,
-    FU_BYTES,
-    TIMESTAMP_AUTO,
+    Flag
 )
     #
 
@@ -40,9 +22,9 @@ def register_user(user_id,user_name, pwd):
     ]}, 0)
      return True #User created
 
-# def remove_user(user_name):
-#     return {'updated': bool(get_client().sql_select(f'select where col({USER})=(cells=(key=[={user_name}] DELETE_MATCHING))' + 
-#                                                     ' and ' + f"col({USER_FEEDBACK})=(cells=(key=[={user_name}] DELETE_MATCHING))"))}
+def remove_user(user_name):
+    return {'updated': bool(get_client().sql_select(f'select where col({USER})=(cells=(key=[={user_name}] DELETE_MATCHING))' + 
+                                                    ' and ' + f"col({USER_FEEDBACK})=(cells=(key=[={user_name}] DELETE_MATCHING))"))}
  
 def get_user(user_id):
     user = get_client().sql_select_serial(

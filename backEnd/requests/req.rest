@@ -52,6 +52,6 @@ Content-Type: application/json
 ###
 GET http://localhost:5000/auth/getuser/jovy6lsl2
 ###
-GET http://localhost:3003/api/blogs
-
+GET http://localhost:5000/auth/islogged
 ###
+POST http://localhost:5000/feedback/comment/delete/3

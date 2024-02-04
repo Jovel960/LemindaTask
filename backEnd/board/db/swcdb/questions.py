@@ -1,27 +1,9 @@
 from db.swcdb import (get_client)
 from .definer_columns import (QUESTIONS,USER,USER_FEEDBACK)
 from swcdb.thrift.service import (
-    SpecScan,
     UCellSerial,
     CellValueSerial,
-    SpecIntervalSerial,
-    SpecKeyInterval,
-    SpecFraction,
-    SpecIntervalOptions,
-    Flag,
-    Comp,
-    SpecColumnSerial,
-    SpecFlags,
-    SpecFlagsOpt,
-    SpecIntervalUpdateSerial,
-    SpecUpdateOP,
-    UpdateOP,
-    SpecValueSerial,
-    SpecValueSerialField,
-    SpecValueSerial_BYTES,
-    CellValueSerialOp,
-    FU_BYTES,
-    TIMESTAMP_AUTO,
+    Flag
 )
 
 d_questions = [
@@ -177,8 +159,8 @@ def get_questions(user_id):
             }) 
     return _q
 
-def get_question():
-    pass
+# def get_question():
+#     pass
 
 def has_q_rating(q_id,user_id):
     has_rating = get_client().sql_select(f'select where col({QUESTIONS})=(cells=(key=[="{q_id}"]  ONLY_KEYS))' + 
@@ -219,6 +201,13 @@ def feedback(q_id, user_id, feedback="", rating=""):
         ts_desc=True
         )]}, 0)
      return {'updated':True}
+
+def delete_feedback(q_id, user_id):
+    if (has_q_rating(q_id,user_id)):
+         return  {'updated': bool(get_client().sql_select_serial(
+             f'select where col({USER_FEEDBACK})=(cells=(key=[="{q_id}",="{user_id}"]' +
+             f' update~=(AUTO,[0:B:""])))'))}
+
      
 
         
