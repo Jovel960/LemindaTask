@@ -28,7 +28,8 @@ def rate(q_id):
 def feedback(q_id):
     user_id=current_user.id
     feedback = request.json["feedback"]
+    print(feedback)
     if not bool(feedback):
         return jsonify({"error":"feedback is missing"}), 400
-    res = db.swcdb.questions.feedback(q_id,user_id, "hello")
+    res = db.swcdb.questions.feedback(q_id,user_id, feedback)
     return jsonify(res), 200
