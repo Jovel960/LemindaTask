@@ -1,5 +1,5 @@
 from flask import   current_app ,jsonify, request, Blueprint
-from flask_login import login_required
+from flask_login import login_required, current_user
 import db
 
 
@@ -9,6 +9,7 @@ def init(app): app.register_blueprint(_app)
 @_app.route('/questions', methods=["GET", "POST"])
 @login_required
 def questions():
+    print(current_user.id)
     if(request.method == "POST"):
         try:
             db.swcdb.questions.add_questions()

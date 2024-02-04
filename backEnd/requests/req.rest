@@ -19,6 +19,10 @@ GET http://localhost:5000/questions
 
 ###
 
+POST http://localhost:5000/feedback/rate/1
+
+###
+
 POST http://localhost:5000/auth/logout
 
 ###

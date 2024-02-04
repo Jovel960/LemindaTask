@@ -164,9 +164,44 @@ def get_questions():
             "question": question,
             "options": options,
             "correct_answer": correct_answer
-            })    # print(_q)
+            }) 
     return _q
-    
+
+def get_question():
+    pass
+
+def has_q_rating(q_id,user_id):
+    return len((get_client.sql_select(f'select where col({QUESTIONS})=(cells(key=[{q_id}]  ONLY_KEYS))' + 
+                                             'and' + f'col({USER_FEEDBACK})=(cells=(key=[{q_id}, {user_id}]  ONLY_KEYS))'))) == 1
+
+def rating(q_id, user_id, rating):
+     if (has_q_rating()):
+         #perform update query
+         return   
+     get_client().update_serial({USER_FEEDBACK:  [UCellSerial(
+        f=Flag.INSERT,
+        k=[q_id.encode(), user_id.encode()],
+        v=[
+            CellValueSerial(field_id=0, v_bytes=feedback.encode()),
+            CellValueSerial(field_id=1, v_bytes=rating.encode()),
+            ],
+        ts_desc=True
+        )]}, 0)
+
+def feedback(q_id, user_id, feedback):
+     if (has_q_rating()):
+         #perform update query
+         return   
+     get_client().update_serial({USER_FEEDBACK:  [UCellSerial(
+        f=Flag.INSERT,
+        k=[q_id.encode(), user_id.encode()],
+        v=[
+            CellValueSerial(field_id=0, v_bytes=feedback.encode()),
+            CellValueSerial(field_id=1, v_bytes=rating.encode()),
+            ],
+        ts_desc=True
+        )]}, 0)
+
 
         
  
