@@ -66,7 +66,6 @@ def register():
         return jsonify({'error': f'something went wrong: {e.__class__.__name__}'}), 400
     
 @_app.route('/islogged')
-@login_required
 def index():
     return "", (200 if current_user.is_authenticated else 401)
 
