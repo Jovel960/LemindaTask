@@ -70,4 +70,9 @@ def register():
 def index():
     return "", (200 if current_user.is_authenticated else 401)
 
+@_app.route('/user/delete/<user_id>', methods=["DELETE"])
+@login_required
+def delete_user(user_id):
+    res = db.swcdb.user.remove_user(user_id)
+    return jsonify(res), 200
     
