@@ -1,6 +1,5 @@
 from db.swcdb import (get_client)
-from .definer_columns import (QUESTIONS, UNIQUE_ID,USER,USER_FEEDBACK)
-from db.swcdb.common import (generate_uid)
+from .definer_columns import (QUESTIONS,USER,USER_FEEDBACK)
 from swcdb.thrift.service import (
     SpecScan,
     UCellSerial,

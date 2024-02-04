@@ -6,10 +6,10 @@ import db
 _app = Blueprint('questions', __name__)
 def init(app): app.register_blueprint(_app)
 
+#for dev
 @_app.route('/questions', methods=["GET", "POST"])
 @login_required
 def questions():
-    print(current_user.id)
     if(request.method == "POST"):
         try:
             db.swcdb.questions.add_questions()
@@ -17,7 +17,7 @@ def questions():
         except:
             return jsonify({'error':'faild to adding the questions'}), 400
     else:
-        questions = db.swcdb.questions.get_questions()
+        questions = db.swcdb.questions.get_questions(current_user.id)
         return jsonify(questions), 200
 
     

@@ -1,5 +1,5 @@
 from swcdb.thrift import service
-from definer_columns import (QUESTIONS,USER,USER_FEEDBACK)
+from .definer_columns import (QUESTIONS, USER, USER_FEEDBACK)
 
 DB_CLIENT = None
 def initialize():

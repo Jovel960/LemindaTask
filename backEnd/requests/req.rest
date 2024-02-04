@@ -20,6 +20,20 @@ GET http://localhost:5000/questions
 ###
 
 POST http://localhost:5000/feedback/rate/1
+Content-Type: application/json
+
+{
+"rating": "0"
+}
+
+###
+
+POST http://localhost:5000/feedback/comment/1
+Content-Type: application/json
+
+{
+"feedback": "Nice question"
+}
 
 ###
 

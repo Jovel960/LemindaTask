@@ -1,5 +1,5 @@
 from db.swcdb import (get_client)
-from .definer_columns import (QUESTIONS, UNIQUE_ID,USER,USER_FEEDBACK)
+from .definer_columns import (QUESTIONS,USER,USER_FEEDBACK)
 from swcdb.thrift.service import (
     SpecScan,
     UCellSerial,
@@ -151,7 +151,7 @@ def add_questions():
         )]}, 0)
     return True
 
-def get_questions():
+def get_questions(user_id):
     _q = []
     q = get_client().sql_select_serial(f'select where col({QUESTIONS})=(cells=())')
     for __q in q:
@@ -159,11 +159,21 @@ def get_questions():
         question=__q.v[0].v_bytes.decode()
         options = [s.decode() for s in __q.v[1].v_lb]
         correct_answer = __q.v[2].v_bytes.decode()
+        rating = {"rate":"", "feedback":""}
+        user_r = get_client().sql_select_serial(f'select where col({USER_FEEDBACK})=(cells=(key=[ ="{q_id}", ="{user_id}"]))')
+        if(len(user_r)): 
+            for field in user_r[0].v:
+                if field.field_id == 1:
+                    rating['rate'] = field.v_bytes.decode()  
+                elif field.field_id == 0:
+                    rating['feedback'] = field.v_bytes.decode() 
         _q.append({
             "q_id": q_id,
             "question": question,
             "options": options,
-            "correct_answer": correct_answer
+            "correct_answer": correct_answer,
+            "user_answer":"",
+            "rating":rating,
             }) 
     return _q
 
@@ -171,13 +181,16 @@ def get_question():
     pass
 
 def has_q_rating(q_id,user_id):
-    return len((get_client.sql_select(f'select where col({QUESTIONS})=(cells(key=[{q_id}]  ONLY_KEYS))' + 
-                                             'and' + f'col({USER_FEEDBACK})=(cells=(key=[{q_id}, {user_id}]  ONLY_KEYS))'))) == 1
+    has_rating = get_client().sql_select(f'select where col({QUESTIONS})=(cells=(key=[="{q_id}"]  ONLY_KEYS))' + 
+                                             ' and ' + f'col({USER_FEEDBACK})=(cells=(key=[="{q_id}", ="{user_id}"]))')
+    return len(has_rating.serial_cells) == 2
 
-def rating(q_id, user_id, rating):
-     if (has_q_rating()):
-         #perform update query
-         return   
+def rating(q_id, user_id, rating="", feedback=""):
+     if (has_q_rating(q_id,user_id)):
+         return  {'updated': bool(get_client().sql_select_serial(
+             f'select where col({USER_FEEDBACK})=(cells=(key=[="{q_id}",="{user_id}"]' +
+             f' update~=(AUTO,[1:B:{rating}])))'))}
+            
      get_client().update_serial({USER_FEEDBACK:  [UCellSerial(
         f=Flag.INSERT,
         k=[q_id.encode(), user_id.encode()],
@@ -187,11 +200,15 @@ def rating(q_id, user_id, rating):
             ],
         ts_desc=True
         )]}, 0)
+     return {'updated':True}
 
-def feedback(q_id, user_id, feedback):
-     if (has_q_rating()):
-         #perform update query
-         return   
+
+
+def feedback(q_id, user_id, feedback="", rating=""):
+     if (has_q_rating(q_id,user_id)):
+         return  {'updated': bool(get_client().sql_select_serial(
+             f'select where col({USER_FEEDBACK})=(cells=(key=[="{q_id}",="{user_id}"]' +
+             f' update~=(AUTO,[0:B:{feedback}])))'))} 
      get_client().update_serial({USER_FEEDBACK:  [UCellSerial(
         f=Flag.INSERT,
         k=[q_id.encode(), user_id.encode()],
@@ -201,7 +218,8 @@ def feedback(q_id, user_id, feedback):
             ],
         ts_desc=True
         )]}, 0)
-
+     return {'updated':True}
+     
 
         
  
