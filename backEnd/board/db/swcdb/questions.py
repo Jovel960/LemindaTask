@@ -5,6 +5,7 @@ from swcdb.thrift.service import (
     CellValueSerial,
     Flag
 )
+from utilities import (user_operation)
 
 d_questions = [
     {
@@ -140,61 +141,63 @@ def get_questions(user_id):
         question=__q.v[0].v_bytes.decode()
         options = [s.decode() for s in __q.v[1].v_lb]
         correct_answer = __q.v[2].v_bytes.decode()
-        rating = {"rate":"", "feedback":""}
+        user_op = {"rate":"", "feedback":"", "user_ans":""}
         user_r = get_client().sql_select_serial(f'select where col({USER_FEEDBACK})=(cells=(key=[ ="{q_id}", ="{user_id}"]))')
         if(len(user_r)): 
             for field in user_r[0].v:
                 if field.field_id == 1:
-                    rating['rate'] = field.v_bytes.decode()  
+                    user_op['rate'] = field.v_bytes.decode()  
                 elif field.field_id == 0:
-                    rating['feedback'] = field.v_bytes.decode() 
+                    user_op['feedback'] = field.v_bytes.decode() 
+                elif field.field.id == 2:
+                    user_op["user_ans"] = field.v_bytes.decode()
         _q.append({
             "q_id": q_id,
             "question": question,
             "options": options,
             "correct_answer": correct_answer,
             "user_answer":"",
-            "rating":rating,
+            "user_op":user_op,
             }) 
     return _q
-
-# def get_question():
-#     pass
 
 def has_q_rating(q_id,user_id):
     has_rating = get_client().sql_select(f'select where col({QUESTIONS})=(cells=(key=[="{q_id}"]  ONLY_KEYS))' + 
                                              ' and ' + f'col({USER_FEEDBACK})=(cells=(key=[="{q_id}", ="{user_id}"]))')
     return len(has_rating.serial_cells) == 2
 
-def rank(q_id, user_id, rating="", feedback=""):
-     if (has_q_rating(q_id,user_id)):
-         return  {'updated': bool(get_client().sql_select_serial(
-             f'select where col({USER_FEEDBACK})=(cells=(key=[="{q_id}",="{user_id}"]' +
-             f' update~=(AUTO,[1:B:{rating}])))'))}
+# def rank(q_id, user_id, rating="", feedback="", user_ans=""):
+#      if (has_q_rating(q_id,user_id)):
+#          return  {'updated': bool(get_client().sql_select_serial(
+#              f'select where col({USER_FEEDBACK})=(cells=(key=[="{q_id}",="{user_id}"]' +
+#              f' update~=(AUTO,[1:B:{rating}])))'))}
             
-     get_client().update_serial({USER_FEEDBACK:  [UCellSerial(
-        f=Flag.INSERT,
-        k=[q_id.encode(), user_id.encode()],
-        v=[
-            CellValueSerial(field_id=0, v_bytes=feedback.encode()),
-            CellValueSerial(field_id=1, v_bytes=rating.encode()),
-            ],
-        )]}, 0)
-     return {'updated':True}
+#      get_client().update_serial({USER_FEEDBACK:  [UCellSerial(
+#         f=Flag.INSERT,
+#         k=[q_id.encode(), user_id.encode()],
+#         v=[
+#             CellValueSerial(field_id=0, v_bytes=feedback.encode()),
+#             CellValueSerial(field_id=1, v_bytes=rating.encode()),
+#             CellValueSerial(field_id=2, v_bytes=user_ans.encode()),
+#             ],
+#         )]}, 0)
+#      return {'updated':True}
 
-
-
-def feedback(q_id, user_id, feedback="", rating=""):
+def user_op(q_id, user_id, feedback="", rating="", user_ans=""):
      if (has_q_rating(q_id,user_id)):
-         return  {'updated': bool(get_client().sql_select_serial(
-             f'select where col({USER_FEEDBACK})=(cells=(key=[="{q_id}",="{user_id}"]' +
-             f' update~=(AUTO,[0:B:{feedback}])))'))} 
+         user_op = user_operation(feedback, rating, user_ans)
+         if(user_op):
+             return  {'updated': bool(get_client().sql_select_serial(
+                 f'select where col({USER_FEEDBACK})=(cells=(key=[="{q_id}",="{user_id}"]' +
+                 f' update~=(AUTO,[{user_op[0]}:B:{user_op[1]}])))'))}
+         else: return {'updated':False} 
      get_client().update_serial({USER_FEEDBACK:  [UCellSerial(
         f=Flag.INSERT,
         k=[q_id.encode(), user_id.encode()],
         v=[
             CellValueSerial(field_id=0, v_bytes=feedback.encode()),
             CellValueSerial(field_id=1, v_bytes=rating.encode()),
+            CellValueSerial(field_id=2, v_bytes=user_ans.encode()),
             ],
         )]}, 0)
      return {'updated':True}
@@ -204,7 +207,9 @@ def delete_feedback(q_id, user_id):
          return  {'updated': bool(get_client().sql_select_serial(
              f'select where col({USER_FEEDBACK})=(cells=(key=[="{q_id}",="{user_id}"]' +
              f' update~=(AUTO,[0:B:""])))'))}
+    
 
+    
      
 
         

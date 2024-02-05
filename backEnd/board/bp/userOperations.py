@@ -20,7 +20,7 @@ def rate(q_id):
     rating = request.json["rating"].strip()
     if not (bool(rating) and rating in FEEDBKACK):
         return jsonify({"error":"rating is missing"}), 400
-    res = db.swcdb.questions.rank(q_id,user_id, rating)
+    res = db.swcdb.questions.user_op(q_id=q_id,user_id=user_id, rating=rating)
     return jsonify(res), 200
 
 @_app.route('/comment/<q_id>', methods=["POST"])
@@ -30,7 +30,7 @@ def add_feedback(q_id):
     feedback = request.json["feedback"]
     if not bool(feedback):
         return jsonify({"error":"feedback is missing"}), 400
-    res = db.swcdb.questions.feedback(q_id,user_id, feedback)
+    res = db.swcdb.questions.user_op(q_id=q_id,user_id=user_id, feedback=feedback)
     return jsonify(res), 200
 
 @_app.route('/comment/delete/<q_id>', methods=["POST"])

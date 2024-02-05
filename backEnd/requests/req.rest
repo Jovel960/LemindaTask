@@ -23,7 +23,7 @@ PATCH  http://localhost:5000/feedback/rate/3
 Content-Type: application/json
 
 {
-"rating": "0"
+"rating": "1"
 }
 
 ###
