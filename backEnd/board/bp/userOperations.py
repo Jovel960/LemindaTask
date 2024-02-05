@@ -17,9 +17,10 @@ def init(app): app.register_blueprint(_app, url_prefix='/feedback')
 @login_required
 def rate(q_id):
     user_id=current_user.id
-    rating = request.json["rating"].strip()
+    rating = request.json["rating"]
     if not (bool(rating) and rating in FEEDBKACK):
         return jsonify({"error":"rating is missing"}), 400
+    print("asdasd", rating)
     res = db.swcdb.questions.user_op(q_id=q_id,user_id=user_id, rating=rating)
     return jsonify(res), 200
 
