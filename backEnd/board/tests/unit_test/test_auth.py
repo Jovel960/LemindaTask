@@ -1,18 +1,5 @@
 # test_auth.py
-def test_login_route(test_client):
-    # Data for a valid login attempt
-    invalid_credentials = {
-        'userid': 'yovel',
-        'password': '12345'
-    }
-
-    valid_credentials = {
-        'userid': 'jovel',
-        'password': '1243'
-    }
-
-    
-
+def test_login_route(valid_credentials, invalid_credentials, test_client):  
     # Test invalid login
     response = test_client.post('/auth/login', json=invalid_credentials)
     assert response.status_code == 400 

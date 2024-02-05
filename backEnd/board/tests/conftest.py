@@ -16,6 +16,10 @@ def api_db():
 def valid_credentials():
     return {'userid': 'jovel','password': '1243'}
 
+@pytest.fixture(scope="module")
+def invalid_credentials():
+    return {'userid': 'jovel','password': '12435'}
+
 #module scope enable share the test session between test functions
 @pytest.fixture(scope='module')
 def test_client(api_app, api_db):
