@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 import bp
 from flask_login import LoginManager
 from db.models import User
@@ -17,6 +17,17 @@ def create_app():
         if user_data:
             return User(user_id=user_data['user_id'], user_name=user_data['user_name'], password=user_data['hashed_pwd'])
         return None
+    @app.before_request
+    def log_request_info():
+        app.logger.info(f"Method: {request.method}")
+        if request.method == "GET":
+            print(request)
+            app.logger.info(f"Parameters: {request.args}")
+        elif request.method in ["POST", "PUT", "PATCH"]:
+            try:
+                app.logger.info(f"JSON data: {request.json}")
+            except Exception as e:
+                app.logger.info("No JSON data")
     bp.init(app)
     @app.route('/', methods=['GET'])
     def index():

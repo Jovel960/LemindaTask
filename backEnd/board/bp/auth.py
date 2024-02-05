@@ -17,12 +17,15 @@ def create_user_password_hash(pwd):
 @_app.route('/getuser/<username>')
 @login_required
 def check(username):
-    return db.swcdb.user.get_user(username)
+    user = db.swcdb.user.get_user(username)
+    if user:
+        return jsonify(user), 200
+    else: 
+        return jsonify({"error":"user not found"}), 400
   
 
 @_app.route('/login', methods=["POST"])
 def login():
-    current_app.logger.info("sd")
     user_id = request.json["userid"].strip()
     user_pwd = request.json["password"].strip()
     if not (user_id and user_pwd):
