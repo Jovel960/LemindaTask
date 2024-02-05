@@ -21,7 +21,6 @@ def test_client(api_app, api_db):
     with api_app.test_client() as testing_client:
         # Establish an application context before running the tests.
         with api_app.app_context():
-            #db.create_all()  # Create all tables for the test DB
             yield testing_client  # this is where the testing happens!
             # db.swcdb.user.remove_all_users()
             api_db.swcdb.questions.remove_all_feedbacks()  # Clean up the DB after tests are done
