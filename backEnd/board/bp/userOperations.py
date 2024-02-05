@@ -44,5 +44,12 @@ def delete_feedback(q_id):
 @_app.route('/answer/<q_id>', methods=["POST"])
 @login_required
 def user_asnwer(q_id):
-    pass
+    user_id = current_user.id
+    user_ans = request.json["user_ans"]
+    if not bool(user_ans):
+        return jsonify({'error':'user answer is missing'}), 400
+    if not (user_ans in db.swcdb.questions.get_question_distractors(q_id)):
+        return jsonify({'error':'user answer dosent match to the question distractors'}), 400
+    res = db.swcdb.questions.user_op(q_id=q_id, user_id=user_id, user_ans=user_ans)
+    return jsonify(res), 200
 

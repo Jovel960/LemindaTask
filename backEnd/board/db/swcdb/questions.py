@@ -149,7 +149,7 @@ def get_questions(user_id):
                     user_op['rate'] = field.v_bytes.decode()  
                 elif field.field_id == 0:
                     user_op['feedback'] = field.v_bytes.decode() 
-                elif field.field.id == 2:
+                elif field.field_id == 2:
                     user_op["user_ans"] = field.v_bytes.decode()
         _q.append({
             "q_id": q_id,
@@ -207,10 +207,7 @@ def delete_feedback(q_id, user_id):
          return  {'updated': bool(get_client().sql_select_serial(
              f'select where col({USER_FEEDBACK})=(cells=(key=[="{q_id}",="{user_id}"]' +
              f' update~=(AUTO,[0:B:""])))'))}
-    
 
-    
-     
-
-        
- 
+def get_question_distractors(q_id):
+    q = get_client().sql_select_serial(f'select where col({QUESTIONS})=(cells=(key=[={q_id}] limit=1))')
+    return [s.decode() for s in q[0].v[1].v_lb]

@@ -46,21 +46,23 @@ def logout():
 @_app.route('/register', methods=["POST"])
 def register():
     try:
-        username = request.json['userid'].strip()
+        user_id = request.json['userid'].strip()
         name = request.json['username'].strip()
         user_pwd = request.json['password'].strip()
-        if not (username and user_pwd and name):
+        if not (user_id and user_pwd and name):
             return jsonify({'error':'username, name and password must be provided'}), 400 
-        isUserExists = db.swcdb.user.isUserExists(username)
+        if len(user_id) < 3 or len(user_pwd) < 3 or len(name) < 3:
+            return jsonify({'error':'password or username or name must be at leat with 3 characters'}), 400 
+        isUserExists = db.swcdb.user.isUserExists( user_id)
         if(isUserExists):
             return jsonify({'error':'user already exists'}), 400
         hashed_pwd = create_user_password_hash(request.json.pop('password'))
-        user_created = db.swcdb.user.register_user(username,name, hashed_pwd)
+        user_created = db.swcdb.user.register_user(user_id,name, hashed_pwd)
         #token is an option instead 
         if(user_created):
-            user_record = db.swcdb.user.get_user(username)
+            user_record = db.swcdb.user.get_user(user_id)
             login_user(User(user_id=user_record['user_id'], user_name=user_record['user_name'], password=user_record['hashed_pwd']))
-            return jsonify({'ok': 'user created successfully', 'username': username}), 201
+            return jsonify({'ok': 'user created successfully', 'username': user_id}), 201
         else:
             return jsonify({'error':'something went wrong'}), 400
     except Exception as e:
