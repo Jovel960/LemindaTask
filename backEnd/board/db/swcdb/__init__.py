@@ -18,6 +18,6 @@ def close_connection():
 def create_cols():
     DB_CLIENT.sql_mng_column(f"create column(name='QUESTIONS' cid={QUESTIONS} type=SERIAL)")
     DB_CLIENT.sql_mng_column(f"create column(name='USERS'  cid={USER} type=SERIAL)")
-    DB_CLIENT.sql_mng_column(f"create column(name='USER_FEEDBACK' CID={USER_FEEDBACK} seq=SERIAL)")
+    DB_CLIENT.sql_mng_column(f"create column(name='USER_FEEDBACK' cid={USER_FEEDBACK} seq=SERIAL)")
 
 
