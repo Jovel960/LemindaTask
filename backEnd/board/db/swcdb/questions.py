@@ -211,3 +211,6 @@ def delete_feedback(q_id, user_id):
 def get_question_distractors(q_id):
     q = get_client().sql_select_serial(f'select where col({QUESTIONS})=(cells=(key=[={q_id}] limit=1))')
     return [s.decode() for s in q[0].v[1].v_lb]
+
+def remove_all_feedbacks():
+    return {'users feedback removed': bool(get_client().sql_select_serial(f'select where col({USER_FEEDBACK})=(cells=(DELETE_MATCHING))'))}

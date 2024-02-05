@@ -2,7 +2,7 @@ POST http://localhost:5000/auth/register
 Content-Type: application/json
 
 {
-"userid":"hovel",
+"userid":"jovel",
 "username":"yovel",
 "password":"1243"
 }
@@ -23,7 +23,7 @@ PATCH  http://localhost:5000/feedback/rate/3
 Content-Type: application/json
 
 {
-"rating": "0"
+"rating": "1"
 }
 
 ###
