@@ -22,6 +22,7 @@ def check(username):
 
 @_app.route('/login', methods=["POST"])
 def login():
+    current_app.logger.info("sd")
     user_id = request.json["userid"].strip()
     user_pwd = request.json["password"].strip()
     if not (user_id and user_pwd):
