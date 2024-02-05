@@ -23,8 +23,6 @@ def invalid_credentials():
 #module scope enable share the test session between test functions
 @pytest.fixture(scope='module')
 def test_client(api_app, api_db):
-    # flask_testing_app = create_new_client  # Assuming you have a testing config
-
     # Create a test client using the Flask application configured for testing
     with api_app.test_client() as testing_client:
         # Establish an application context before running the tests.
