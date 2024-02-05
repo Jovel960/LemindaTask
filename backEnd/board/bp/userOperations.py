@@ -17,7 +17,7 @@ def init(app): app.register_blueprint(_app, url_prefix='/feedback')
 @login_required
 def rate(q_id):
     user_id=current_user.id
-    rating = request.json["rating"]
+    rating = request.json.get("rating", None)
     if not (bool(rating) and rating in FEEDBKACK):
         return jsonify({"error":"rating is missing"}), 400
     print("asdasd", rating)
@@ -28,7 +28,7 @@ def rate(q_id):
 @login_required
 def add_feedback(q_id):
     user_id=current_user.id
-    feedback = request.json["feedback"]
+    feedback = request.json.get("feedback", None)
     if not bool(feedback):
         return jsonify({"error":"feedback is missing"}), 400
     res = db.swcdb.questions.user_op(q_id=q_id,user_id=user_id, feedback=feedback)
@@ -46,7 +46,7 @@ def delete_feedback(q_id):
 @login_required
 def user_asnwer(q_id):
     user_id = current_user.id
-    user_ans = request.json["user_ans"]
+    user_ans = request.json.get("user_ans", None)
     if not bool(user_ans):
         return jsonify({'error':'user answer is missing'}), 400
     if not (user_ans in db.swcdb.questions.get_question_distractors(q_id)):
