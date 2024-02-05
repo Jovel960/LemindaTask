@@ -1,5 +1,6 @@
 from swcdb.thrift import service
 from .definer_columns import (QUESTIONS, USER, USER_FEEDBACK)
+from utilities import (env)
 
 DB_CLIENT = None
 def initialize():

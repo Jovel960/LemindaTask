@@ -3,7 +3,7 @@ import bp
 from flask_login import LoginManager
 from db.models import User
 import db
-from utilities import (APP_SECRET_KEY, set_app_logger)
+from utilities import (APP_SECRET_KEY, set_app_logger, env)
 
 def create_app():
     _app = Flask(__name__)
