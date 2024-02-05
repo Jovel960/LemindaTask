@@ -1,4 +1,5 @@
 from flask import Flask, request
+from flask_cors import CORS
 import bp
 from flask_login import LoginManager
 from db.models import User
@@ -8,6 +9,7 @@ from utilities import (APP_SECRET_KEY, set_app_logger, env)
 def create_app():
     _app = Flask(__name__)
     _app.config['SECRET_KEY'] = APP_SECRET_KEY
+    CORS(_app, supports_credentials=True)
     set_app_logger(_app)
     login_manager = LoginManager()
     login_manager.init_app(_app)
