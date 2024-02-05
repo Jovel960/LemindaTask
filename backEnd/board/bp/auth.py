@@ -48,6 +48,9 @@ def register():
     try:
         username = request.json['userid'].strip()
         name = request.json['username'].strip()
+        user_pwd = request.json['password'].strip()
+        if not (username and user_pwd and name):
+            return jsonify({'error':'username, name and password must be provided'}), 400 
         isUserExists = db.swcdb.user.isUserExists(username)
         if(isUserExists):
             return jsonify({'error':'user already exists'}), 400
@@ -61,7 +64,6 @@ def register():
         else:
             return jsonify({'error':'something went wrong'}), 400
     except Exception as e:
-        # Here, e is the exception object, which you can convert to a string to get the message
         current_app.logger.error(f"Error: {e.__class__.__name__}: {str(e)}")  # This prints the type of the exception and the message
         return jsonify({'error': f'something went wrong: {e.__class__.__name__}'}), 400
     

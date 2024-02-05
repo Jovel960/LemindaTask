@@ -129,7 +129,6 @@ def add_questions():
             CellValueSerial(field_id=1, v_lb=[s.encode() for s in q["options"]]),
             CellValueSerial(field_id=2, v_bytes=q["correct_answer"].encode()),
             ],
-        ts_desc=True
         )]}, 0)
     return True
 
@@ -167,7 +166,7 @@ def has_q_rating(q_id,user_id):
                                              ' and ' + f'col({USER_FEEDBACK})=(cells=(key=[="{q_id}", ="{user_id}"]))')
     return len(has_rating.serial_cells) == 2
 
-def rating(q_id, user_id, rating="", feedback=""):
+def rank(q_id, user_id, rating="", feedback=""):
      if (has_q_rating(q_id,user_id)):
          return  {'updated': bool(get_client().sql_select_serial(
              f'select where col({USER_FEEDBACK})=(cells=(key=[="{q_id}",="{user_id}"]' +
@@ -180,7 +179,6 @@ def rating(q_id, user_id, rating="", feedback=""):
             CellValueSerial(field_id=0, v_bytes=feedback.encode()),
             CellValueSerial(field_id=1, v_bytes=rating.encode()),
             ],
-        ts_desc=True
         )]}, 0)
      return {'updated':True}
 
@@ -198,7 +196,6 @@ def feedback(q_id, user_id, feedback="", rating=""):
             CellValueSerial(field_id=0, v_bytes=feedback.encode()),
             CellValueSerial(field_id=1, v_bytes=rating.encode()),
             ],
-        ts_desc=True
         )]}, 0)
      return {'updated':True}
 

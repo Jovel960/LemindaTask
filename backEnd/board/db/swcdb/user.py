@@ -17,14 +17,15 @@ def register_user(user_id,user_name, pwd):
                 CellValueSerial(field_id=0, v_bytes=user_name.encode()),
                 CellValueSerial(field_id=1, v_bytes=pwd.encode()),
             ],
-            ts_desc=True
         )
     ]}, 0)
      return True #User created
 
 def remove_user(user_id):
-    return  bool(get_client().sql_select(f'select where col({USER})=(cells=(key=[={user_id}] DELETE_MATCHING))' + 
-                                                    ' and ' + f"col({USER_FEEDBACK})=(cells=(key>=[>"", ={user_name}] DELETE_MATCHING))"))
+    return  bool(get_client().sql_select(
+         f'select where col({USER})=(cells=(key=[={user_id}] limit=1 DELETE_MATCHING))' +
+         ' and ' +
+         f"col({USER_FEEDBACK})=(cells=(key>=[>'', ={user_id}] DELETE_MATCHING))"))
  
 def get_user(user_id):
     user = get_client().sql_select_serial(
