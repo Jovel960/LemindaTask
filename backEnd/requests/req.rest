@@ -67,4 +67,4 @@ GET http://localhost:5000/auth/islogged
 POST http://localhost:5000/feedback/comment/delete/3
 
 ###
-DELETE  http://localhost:5000/auth/user/delete/hovel
+DELETE  http://localhost:5000/auth/user/delete/jovel
