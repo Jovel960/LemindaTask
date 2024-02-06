@@ -13,7 +13,7 @@ def questions():
     if(request.method == "POST"):
             res = db.swcdb.questions.add_questions()
             if(res):
-                 return jsonify(res), 201
+                 return jsonify(res), (201 if res['updated'] else 200)
             return jsonify({'error':'faild to adding the questions'}), 400
     else:
         questions = db.swcdb.questions.get_questions(current_user.id)
