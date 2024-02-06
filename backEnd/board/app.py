@@ -13,7 +13,7 @@ def create_app():
     set_app_logger(_app)
     login_manager = LoginManager()
     login_manager.init_app(_app)
-    _app.logger.info(db.swcdb.create_cols())
+    _app.logger.info(db.swcdb.create_cols()) #optional
     @login_manager.user_loader
     def load_user(user_id):
         user_data = db.swcdb.user.get_user(user_id)
