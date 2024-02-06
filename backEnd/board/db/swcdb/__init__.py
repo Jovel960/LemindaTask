@@ -16,11 +16,15 @@ def close_connection():
     DB_CLIENT.close()
 
 
-def create_cols():
-    DB_CLIENT.sql_mng_column(f"create column(name='QUESTIONS' cid={QUESTIONS} type=SERIAL)")
-    DB_CLIENT.sql_mng_column(f"create column(name='USERS'  cid={USER} type=SERIAL)")
-    DB_CLIENT.sql_mng_column(f"create column(name='USER_FEEDBACK' cid={USER_FEEDBACK} seq=SERIAL)")
-    DB_CLIENT.sql_mng_column(f"create column(name='QUESTIONS' cid={GENERAL_COMMENT} type=SERIAL)")
+def create_cols() -> str:
+    try:
+        get_client().sql_mng_column(f"create column(name='QUESTIONS' cid={QUESTIONS} type=SERIAL)")
+        get_client().sql_mng_column(f"create column(name='USERS'  cid={USER} type=SERIAL)")
+        get_client().sql_mng_column(f"create column(name='USER_FEEDBACK' cid={USER_FEEDBACK} seq=SERIAL)")
+        get_client().sql_mng_column(f"create column(name='QUESTIONS' cid={GENERAL_COMMENT} type=SERIAL)")
+        return "New schemas are created"
+    except Exception as e:
+        return "Schemas already exists!"
 
 
 

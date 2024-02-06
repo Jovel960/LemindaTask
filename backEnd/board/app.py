@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, current_app
 from flask_cors import CORS
 import bp
 from flask_login import LoginManager
@@ -13,6 +13,7 @@ def create_app():
     set_app_logger(_app)
     login_manager = LoginManager()
     login_manager.init_app(_app)
+    _app.logger.info(db.swcdb.create_cols())
     @login_manager.user_loader
     def load_user(user_id):
         user_data = db.swcdb.user.get_user(user_id)
@@ -23,7 +24,6 @@ def create_app():
     def log_request_info():
         _app.logger.info(f"Method: {request.method}")
         if request.method == "GET":
-            print(request)
             _app.logger.info(f"Parameters: {request.args}")
         elif request.method in ["POST", "PUT", "PATCH"]:
             try:
