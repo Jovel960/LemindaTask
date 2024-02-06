@@ -1,6 +1,5 @@
 from flask import  request, Blueprint, jsonify
 from flask_login import login_required, current_user
-from db.swcdb.definer_columns import (QUESTIONS, USER, USER_FEEDBACK)
 import db
 
 
@@ -29,7 +28,7 @@ def rate(q_id):
         return jsonify(res), 200
     return jsonify({'error':'failed to update the user operation'}), 400
 
-@_app.route('/comment/<q_id>', methods=["POST"])
+@_app.route('/comment/<q_id>', methods=["POST", "PATCH"])
 @login_required
 def add_feedback(q_id):
     is_qid_exists = db.swcdb.questions.verify_qid(q_id)
@@ -55,7 +54,7 @@ def delete_feedback(q_id):
     return jsonify(res), 200
 
 #todo
-@_app.route('/answer/<q_id>', methods=["POST"])
+@_app.route('/answer/<q_id>', methods=["POST", "PATCH"])
 @login_required
 def user_asnwer(q_id):
     is_qid_exists = db.swcdb.questions.verify_qid(q_id)
@@ -71,3 +70,35 @@ def user_asnwer(q_id):
     if res:
         return jsonify(res), 200
     return jsonify({'error':'failed to update the user operation'}), 400
+
+@_app.route('/general', methods=["GET","POST","PATCH"])
+@login_required
+def general_feedback():
+    user_id = current_user.id
+    if request.method in ["POST", "PATCH"]:
+        comment = request.json.get('general_comment', '').strip()
+        if not comment:
+            return jsonify({'error':'bad comment'}), 400
+        res = db.swcdb.general_comment.add_comment(user_id, comment)
+        if res:
+            return jsonify(res), 200
+        else:
+            return jsonify({'error':'something went wrong'}), 400
+    if request.method == "GET":
+        if not db.swcdb.general_comment.user_has_comment(user_id):
+            return jsonify({'error':'user dont have general feedback'}), 200
+        general_feedback = db.swcdb.general_comment.get_comment(user_id)
+        return jsonify(general_feedback), 200
+    
+@_app.route('/general/delete', methods=["DELETE"])
+@login_required
+def delete_general_comment():
+     user_id = current_user.id
+     res = db.swcdb.general_comment.delete_general_comment(user_id)
+     if res['updated']:
+         return jsonify(res), 204
+     return jsonify(res), 200
+
+
+
+

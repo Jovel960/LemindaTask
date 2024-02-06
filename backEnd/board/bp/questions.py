@@ -10,7 +10,7 @@ def init(app): app.register_blueprint(_app)
 @_app.route('/questions', methods=["GET", "POST"])
 @login_required
 def questions():
-    if(request.method == "POST"):
+    if request.method == "POST":
             res = db.swcdb.questions.add_questions()
             if(res):
                  return jsonify(res), (201 if res['updated'] else 200)

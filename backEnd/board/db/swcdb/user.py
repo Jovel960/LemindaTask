@@ -5,10 +5,8 @@ from swcdb.thrift.service import (
     CellValueSerial,
     Flag
 )
-    #
 
 def register_user(user_id,user_name, pwd):
-    #  user_id = str(generate_uid('user_id'))
      get_client().update_serial({USER: [
         UCellSerial(
             f=Flag.INSERT,
