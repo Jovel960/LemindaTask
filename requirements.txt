@@ -5,4 +5,5 @@ werkzeug
 thrift
 swcdb==0.5.12
 pytest
-
+Flask-Cors
+python-dotenv
