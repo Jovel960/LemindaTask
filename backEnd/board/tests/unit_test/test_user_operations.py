@@ -14,8 +14,11 @@ def test_rate_questions(valid_credentials, test_client):
 
 def test_comment_question(test_client):
     feedback = {"feedback": "Great"} 
+    invalid_feedback = {"test": "negative"} 
     response = test_client.post('/feedback/comment/3', json=feedback)
     assert response.status_code == 200
     assert b'{"updated":true}' in response.data  
+    response = test_client.post('/feedback/comment/3', json=invalid_feedback)
+    assert response.status_code == 400
 
     

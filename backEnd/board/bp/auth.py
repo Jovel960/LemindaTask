@@ -26,8 +26,8 @@ def check(username):
 
 @_app.route('/login', methods=["POST"])
 def login():
-    user_id = request.json["userid"].strip()
-    user_pwd = request.json["password"].strip()
+    user_id = request.json.get("userid", '').strip()
+    user_pwd = request.json.get("password", '').strip()
     if not (user_id and user_pwd):
         return jsonify({"error":"user_id or password is missing"}), 400
     try:
@@ -35,7 +35,7 @@ def login():
         if not (userFound and check_user_password_match(user_pwd, userFound["hashed_pwd"])):
             return jsonify({'error':'username or password are wrong'}), 400
         login_user(User(user_id=userFound['user_id'], user_name=userFound['user_name'], password=userFound['hashed_pwd']))
-        return jsonify({"ok":"user logged in"})
+        return jsonify({"ok":"user logged in"}), 200
     except Exception as e:
         current_app.logger.error(f"Error: {e.__class__.__name__}: {str(e)}")  
         return jsonify({'error': f'something went wrong: {e.__class__.__name__}'}), 400
@@ -50,9 +50,9 @@ def logout():
 @_app.route('/register', methods=["POST"])
 def register():
     try:
-        user_id = request.json['userid'].strip()
-        name = request.json['username'].strip()
-        user_pwd = request.json['password'].strip()
+        user_id = request.json.get('userid', '').strip()
+        name = request.json.get('username', '').strip()
+        user_pwd = request.json.get('password', '').strip()
         if not (user_id and user_pwd and name):
             return jsonify({'error':'username, name and password must be provided'}), 400 
         if len(user_id) < 3 or len(user_pwd) < 3 or len(name) < 3:

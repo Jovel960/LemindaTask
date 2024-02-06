@@ -23,7 +23,7 @@ PATCH  http://localhost:5000/feedback/rate/3
 Content-Type: application/json
 
 {
-"rating": "1"
+"rating": "0"
 }
 
 ###
@@ -41,7 +41,7 @@ POST http://localhost:5000/feedback/answer/3
 Content-Type: application/json
 
 {
-"user_ans": "Simple Qualty Language"
+"user_ans": "Simple Quality Language"
 }
 
 

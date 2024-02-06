@@ -11,14 +11,15 @@ def init(app): app.register_blueprint(_app)
 @login_required
 def questions():
     if(request.method == "POST"):
-        try:
-            db.swcdb.questions.add_questions()
-            return jsonify({'ok':'questions are added'}), 201
-        except:
+            res = db.swcdb.questions.add_questions()
+            if(res):
+                 return jsonify(res), 201
             return jsonify({'error':'faild to adding the questions'}), 400
     else:
         questions = db.swcdb.questions.get_questions(current_user.id)
-        return jsonify(questions), 200
+        if(questions):
+            return jsonify(questions), 200
+        return ({'error':'failed to fetch user questions'}), 400
 
     
 
