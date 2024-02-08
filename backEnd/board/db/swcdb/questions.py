@@ -174,6 +174,8 @@ def has_q_rating(q_id,user_id):
                                              ' and ' + f'col({USER_FEEDBACK})=(cells=(key=[="{q_id}", ="{user_id}"]))')
     return len(has_rating.serial_cells) == 2
 
+#add time stamp
+#a benefit of saving each question and not the whole survey is the searching according to a question and not a survey
 def user_op(q_id, user_id, feedback="", rating="", user_ans=""):
      try:
         if (has_q_rating(q_id,user_id)):
