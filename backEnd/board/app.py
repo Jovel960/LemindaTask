@@ -18,21 +18,6 @@ def create_app():
     # Register blueprints here
     # from bp.auth import (bpname)
     # _app.register_blueprint(bpname, url_prefix="/prefix")
-    @_app.before_request
-    def log_request_info():
-        _app.logger.info(f"Method: {request.method}")
-        if request.method == "GET":
-            _app.logger.info(f"Parameters: {request.args}")
-        elif request.method in ["POST", "PUT", "PATCH"]:
-            try:
-                _app.logger.info(f"JSON data: {request.json}")
-            except Exception as e:
-                _app.logger.info("No JSON data")
-    @_app.after_request
-    def log_response_info(response):
-        _app.logger.info(f"Status: {response.status}")
-        _app.logger.info(f"Headers: {response.headers}")
-        return response 
     @login_manager.user_loader
     def load_user(user_id):
         user_data = db.swcdb.user.get_user(user_id)
@@ -43,6 +28,23 @@ def create_app():
     return _app
 
 app = create_app()
+
+@app.before_request
+def log_request_info():
+    app.logger.info(f"Method: {request.method}")
+    if request.method == "GET":
+        app.logger.info(f"Parameters: {request.args}")
+    elif request.method in ["POST", "PUT", "PATCH"]:
+        try:
+            app.logger.info(f"JSON data: {request.json}")
+        except Exception as e:
+            app.logger.info("No JSON data")
+
+@app.after_request
+def log_response_info(response):
+    app.logger.info(f"Status: {response.status}")
+    app.logger.info(f"Headers: {response.headers}")
+    return response 
  
 @app.route('/', methods=['GET'])
 def index():
