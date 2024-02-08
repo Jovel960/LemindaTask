@@ -21,7 +21,7 @@ def create_cols() -> str:
         get_client().sql_mng_column(f"create column(name='QUESTIONS' cid={QUESTIONS} type=SERIAL)")
         get_client().sql_mng_column(f"create column(name='USERS'  cid={USER} type=SERIAL)")
         get_client().sql_mng_column(f"create column(name='USER_FEEDBACK' cid={USER_FEEDBACK} type=SERIAL)")
-        get_client().sql_mng_column(f"create column(name='QUESTIONS' cid={GENERAL_COMMENT} type=SERIAL)")
+        get_client().sql_mng_column(f"create column(name='GENERAL_COMMENT' cid={GENERAL_COMMENT} type=SERIAL)")
         return "New schemas are created"
     except Exception as e:
         return "Schemas already exists!"
