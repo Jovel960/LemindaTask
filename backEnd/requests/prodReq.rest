@@ -1,0 +1,87 @@
+POST http://35.92.134.136:5000/auth/register
+Content-Type: application/json
+
+{
+"userid":"jovel",
+"username":"yovel",
+"password":"1243"
+}
+###
+
+
+
+POST http://35.92.134.136:5000/questions
+
+###
+
+GET http://35.92.134.136:5000/questions
+
+
+###
+
+PATCH  http://35.92.134.136:5000/feedback/rate/3
+Content-Type: application/json
+
+{
+"rating": "0"
+}
+
+###
+
+POST http://35.92.134.136:5000/feedback/comment/3
+Content-Type: application/json
+
+{
+"feedback": "Great"
+}
+
+###
+
+POST http://35.92.134.136:5000/feedback/general
+Content-Type: application/json
+
+{
+"general_comment": "Great"
+}
+
+###
+
+GET http://35.92.134.136:5000/feedback/general
+
+###
+
+DELETE  http://35.92.134.136:5000/feedback/general/delete
+
+###
+
+POST http://35.92.134.136:5000/feedback/answer/3
+Content-Type: application/json
+
+{
+"user_ans": "Simple Quality Language"
+}
+
+
+###
+
+POST http://35.92.134.136:5000/auth/logout
+
+###
+
+POST http://35.92.134.136:5000/auth/login
+Content-Type: application/json
+
+{
+    "userid": "jovel",
+    "password": "1243"
+}
+
+###
+GET http://35.92.134.136:5000/auth/getuser/jovy6lsl2
+###
+GET http://35.92.134.136:5000/auth/islogged
+###
+POST http://35.92.134.136:5000/feedback/comment/delete/3
+
+###
+DELETE  http://35.92.134.136:5000/auth/user/delete/jovel
