@@ -139,6 +139,7 @@ def add_questions():
     except Exception as e:
         return False
 
+#Using APPROXIMATION PATTERN instead of creating every time the questions object 
 def get_questions(user_id):
     try:
         _q = []
@@ -174,7 +175,8 @@ def has_q_rating(q_id,user_id):
                                              ' and ' + f'col({USER_FEEDBACK})=(cells=(key=[="{q_id}", ="{user_id}"]))')
     return len(has_rating.serial_cells) == 2
 
-#add time stamp
+#add the time where the feedback created
+#save previous feedback id the user change his answer is an option
 #a benefit of saving each question and not the whole survey is the searching according to a question and not a survey
 def user_op(q_id, user_id, feedback="", rating="", user_ans=""):
      try:
