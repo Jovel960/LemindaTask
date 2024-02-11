@@ -28,7 +28,7 @@ def rate(q_id):
         return jsonify(res), 200
     return jsonify({'error':'failed to update the user operation'}), 400
 
-@_app.route('/comment/<q_id>', methods=["POST", "PATCH"])
+@_app.route('/comment/<q_id>', methods=["POST"])
 @login_required
 def add_feedback(q_id):
     is_qid_exists = db.swcdb.questions.verify_qid(q_id)
@@ -71,6 +71,7 @@ def user_asnwer(q_id):
         return jsonify(res), 200
     return jsonify({'error':'failed to update the user operation'}), 400
 
+#split into several routesis an option
 @_app.route('/general', methods=["GET","POST","PATCH"])
 @login_required
 def general_feedback():
@@ -95,9 +96,8 @@ def general_feedback():
 def delete_general_comment():
      user_id = current_user.id
      res = db.swcdb.general_comment.delete_general_comment(user_id)
-     if res['updated']:
-         return jsonify(res), 204
-     return jsonify(res), 200
+     return jsonify(res), (204 if res['updated'] else 200)
+     
 
 
 

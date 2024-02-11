@@ -138,6 +138,7 @@ def add_questions():
         return {'updated':True}
     except Exception as e:
         return False
+    #
 
 #Using APPROXIMATION PATTERN instead of creating every time the questions object 
 def get_questions(user_id):
@@ -169,11 +170,13 @@ def get_questions(user_id):
         return _q
     except:
         return False
+    #
 
 def has_q_rating(q_id,user_id):
     has_rating = get_client().sql_select(f'select where col({QUESTIONS})=(cells=(key=[="{q_id}"]  ONLY_KEYS))' + 
                                              ' and ' + f'col({USER_FEEDBACK})=(cells=(key=[="{q_id}", ="{user_id}"]))')
     return len(has_rating.serial_cells) == 2
+    #
 
 #add the time where the feedback created
 #save previous feedback id the user change his answer is an option
@@ -199,19 +202,24 @@ def user_op(q_id, user_id, feedback="", rating="", user_ans=""):
         return {'updated':True}
      except:
          return False
+    #
 
 def delete_feedback(q_id, user_id):
     if (has_q_rating(q_id,user_id)):
          return  {'updated': bool(get_client().sql_select_serial(
              f'select where col({USER_FEEDBACK})=(cells=(key=[="{q_id}",="{user_id}"]' +
              f' update~=(AUTO,[0:B:""])))'))}
+    #
 
 def get_question_distractors(q_id):
     q = get_client().sql_select_serial(f'select where col({QUESTIONS})=(cells=(key=[={q_id}] limit=1))')
     return [s.decode() for s in q[0].v[1].v_lb]
+    #
 
 def remove_all_feedbacks():
     return {'users feedback removed': bool(get_client().sql_select_serial(f'select where col({USER_FEEDBACK})=(cells=(DELETE_MATCHING))'))}
+    #
 
 def verify_qid(q_id):
     return bool(get_client().sql_select_serial(f'select where col({QUESTIONS})=(cells=(key=[={q_id}]))'))
+    #

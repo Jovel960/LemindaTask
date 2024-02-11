@@ -6,6 +6,7 @@ from swcdb.thrift.service import (
     Flag
 )
 
+#adding more than one general feedback is an option, instead of v_bytes using v_lb list of feedbacks and time
 def add_comment(user_id, comment):
      try:
         if (user_has_comment(user_id)):
@@ -20,13 +21,17 @@ def add_comment(user_id, comment):
         return {'updated':True}
      except:
          return False
+    #
 
 def user_has_comment(user_id):
     return bool(get_client().sql_select_serial(f'select where col({GENERAL_COMMENT})=(cells=(key=[="{user_id}"] limit=1))'))
+    #
 
 def delete_general_comment(user_id):
     return {'updated': bool(get_client().sql_select_serial(f'select where col({GENERAL_COMMENT})=(cells=(key=[="{user_id}"] limit=1 DELETE_MATCHING))'))}
+    #
 
 def get_comment(user_id):
     user_comment = get_client().sql_select_serial(f'select where col({GENERAL_COMMENT})=(cells=(key=[="{user_id}"] limit=1))')
     return {'user_general_feedback': user_comment[0].v[0].v_bytes.decode()}
+    #

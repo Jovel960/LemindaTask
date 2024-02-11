@@ -10,10 +10,13 @@ def initialize():
     return DB_CLIENT
     #
 
-def get_client(): return DB_CLIENT
+def get_client(): 
+    return DB_CLIENT
+    #
 
 def close_connection(): 
     DB_CLIENT.close()
+    #
 
 
 def create_cols() -> str:
@@ -25,6 +28,7 @@ def create_cols() -> str:
         return "New schemas are created"
     except Exception as e:
         return "Schemas already exists!"
+    #
 
 
 

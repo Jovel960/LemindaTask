@@ -1,5 +1,5 @@
 from db.swcdb import (get_client)
-from .definer_columns import (QUESTIONS,USER,USER_FEEDBACK)
+from .definer_columns import (QUESTIONS,USER,USER_FEEDBACK, GENERAL_COMMENT)
 from swcdb.thrift.service import (
     UCellSerial,
     CellValueSerial,
@@ -18,12 +18,15 @@ def register_user(user_id,user_name, pwd):
         )
     ]}, 0)
      return True #User created
+     #
 
 def remove_user(user_id):
     return  bool(get_client().sql_select(
          f'select where col({USER})=(cells=(key=[={user_id}] limit=1 DELETE_MATCHING))' +
          ' and ' +
-         f"col({USER_FEEDBACK})=(cells=(key>=[>'', ={user_id}] DELETE_MATCHING))"))
+         f'col({USER_FEEDBACK})=(cells=(key>=[>'', ={user_id}] DELETE_MATCHING))' + ' and ' + 
+          f'col({GENERAL_COMMENT})=(cells=(key=[="{user_id}"] limit=1 DELETE_MATCHING))'))
+    #
  
 def get_user(user_id):
     user = get_client().sql_select_serial(
@@ -33,10 +36,12 @@ def get_user(user_id):
         return {"user_id":user[0].k[0].decode(),"user_name":user[0].v[0].v_bytes.decode(), "hashed_pwd" : user[0].v[1].v_bytes.decode()}  
     else:
         return False
+    #
     
 
 def isUserExists(user_id):
       return len(get_client().sql_select_serial(
         f'select where col({USER})=(cells=(key=[="{user_id}"]))'
-    )) == 1      
+    )) == 1    
+    #  
      

@@ -26,6 +26,8 @@ def check(username):
 
 @_app.route('/login', methods=["POST"])
 def login():
+    if current_user.is_authenticated: 
+        return jsonify({'error':'user is already logged in'}), 400
     user_id = request.json.get("userid", '').strip()
     user_pwd = request.json.get("password", '').strip()
     if not (user_id and user_pwd):
