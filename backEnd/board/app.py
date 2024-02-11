@@ -18,6 +18,7 @@ def create_app():
     # Register blueprints here
     # from bp.auth import (bpname)
     # _app.register_blueprint(bpname, url_prefix="/prefix")
+    #an option is to place the login manager loader inside auth.py
     @login_manager.user_loader
     def load_user(user_id):
         user_data = db.swcdb.user.get_user(user_id)
