@@ -59,7 +59,7 @@ def register():
             return jsonify({'error':'username, name and password must be provided'}), 400 
         if len(user_id) < 3 or len(user_pwd) < 3 or len(name) < 3:
             return jsonify({'error':'password or username or name must be at leat with 3 characters'}), 400 
-        isUserExists = db.swcdb.user.isUserExists( user_id)
+        isUserExists = db.swcdb.user.isUserExists(user_id)
         if(isUserExists):
             return jsonify({'error':'user already exists'}), 400
         hashed_pwd = create_user_password_hash(request.json.pop('password'))
